@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { activeWell, wells } from '../data/nwisData'
+import { activeWell, eventColors, wells } from '../data/nwisData'
 import { useLanguage } from '../data/translations'
 import PageHeader from '../components/layout/PageHeader'
 import SectionLabel from '../components/ui/SectionLabel'
@@ -8,6 +8,11 @@ import StatusBadge from '../components/ui/StatusBadge'
 
 function Dashboard() {
   const { t } = useLanguage()
+  const depthMin = 2500
+  const depthMax = 3100
+  const currentDepth = 2840
+  const timelineEvents = wells.flatMap((well) => well.events.map((event) => ({ ...event, well: well.id })))
+  const depthPosition = (depth) => `${((depth - depthMin) / (depthMax - depthMin)) * 100}%`
   const riskEvents = [
     { name: 'Mud Loss', risk: 'HIGH' },
     { name: 'Stuck Pipe', risk: 'MEDIUM' },
@@ -56,32 +61,49 @@ function Dashboard() {
         </section>
 
         <aside className="border border-nwis-border bg-nwis-surface p-6">
-          <div className="mb-5 text-[10px] uppercase tracking-[0.3em] text-nwis-muted">{t.labels.timeline}</div>
-          <div className="mb-5 flex justify-between text-[10px] uppercase tracking-[0.2em] text-nwis-muted">
-            {['2500', '2600', '2700', '2800', '2900', '3000', '3100'].map((tick) => (
-              <span key={tick}>{tick}</span>
-            ))}
+          <div className="mb-5 flex items-center justify-between gap-4">
+            <div className="text-[10px] uppercase tracking-[0.3em] text-nwis-muted">{t.labels.timeline}</div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-nwis-primary">Depth / m</div>
           </div>
 
-          <div className="relative overflow-hidden border border-nwis-border bg-[#0b1114] px-3 py-5">
-            <div className="relative h-28">
-              <div className="absolute left-0 right-0 top-[56%] h-px -translate-y-1/2 bg-[#586267]" />
+          <div className="relative overflow-hidden border border-nwis-border bg-[#0b1114] px-4 pb-4 pt-3">
+            <div className="relative h-36">
+              {[2500, 2600, 2700, 2800, 2900, 3000, 3100].map((tick) => (
+                <div key={tick} className="absolute inset-y-0 border-l border-nwis-border/50" style={{ left: depthPosition(tick) }}>
+                  <span className="absolute -left-3 top-1 text-[9px] text-nwis-muted">{tick}</span>
+                </div>
+              ))}
 
-              <div className="absolute left-[60%] top-[52%] h-10 w-[22%] -translate-y-1/2 border border-[#D08A3F]/70 bg-[#8E4026]/15" style={{ left: '42%', width: '22%' }} />
+              <div className="absolute bottom-7 top-8 border border-[#D08A3F]/60 bg-[#8E4026]/20" style={{ left: depthPosition(2800), width: depthPosition(2900 - 2800) }} />
+              <div className="absolute bottom-8 left-0 right-0 border-t border-nwis-muted/70" />
 
-              <div className="absolute left-[20%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#16D968]" />
-              <div className="absolute left-[33%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FFB454]" />
-              <div className="absolute left-[46%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FF1F1F]" />
-              <div className="absolute left-[58%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#16D968]" />
-              <div className="absolute left-[71%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#16D968]" />
-              <div className="absolute left-[82%] top-[56%] h-14 w-[3px] -translate-x-1/2 -translate-y-1/2 bg-[#FFB454]" />
+              {timelineEvents.map((event, index) => (
+                <div
+                  key={`${event.well}-${event.type}-${index}`}
+                  className="group absolute bottom-8 h-16 w-px -translate-x-1/2"
+                  style={{ left: depthPosition(event.depth), backgroundColor: eventColors[event.type] || '#e5a055' }}
+                  title={`${event.type} · ${event.well} · ${event.depth.toLocaleString()} m`}
+                >
+                  <span className="absolute -left-1.5 bottom-0 h-3 w-3 rounded-full border-2 border-[#0b1114]" style={{ backgroundColor: eventColors[event.type] || '#e5a055' }} />
+                  <span className="pointer-events-none absolute bottom-16 left-1/2 hidden -translate-x-1/2 whitespace-nowrap border border-nwis-border bg-nwis-elevated px-2 py-1 text-[9px] text-nwis-text group-hover:block">
+                    {event.type} · {event.well}
+                  </span>
+                </div>
+              ))}
 
-              <div className="absolute left-[90%] top-[56%] h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#EE8104] bg-[#EE8104] shadow-[0_0_0_4px_rgba(235,250,255,0.4)]" />
+              <div className="absolute bottom-5 top-2 w-px bg-nwis-primary" style={{ left: depthPosition(currentDepth) }}>
+                <span className="absolute -left-5 -top-1 rounded-sm bg-nwis-primary px-1.5 py-0.5 text-[9px] font-semibold text-[#090e11]">NOW</span>
+              </div>
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-nwis-border pt-3 text-[9px] uppercase tracking-[0.16em] text-nwis-muted">
+              <span className="text-nwis-primary">Current · 2,840 m</span>
+              <span className="text-[#D08A3F]">Risk zone · 2,800—2,900 m</span>
+              {Object.entries(eventColors).slice(0, 3).map(([label, color]) => <span key={label} className="inline-flex items-center gap-1.5"><i className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />{label}</span>)}
             </div>
           </div>
 
-          <div className="mt-8 text-[10px] upp ercase tracking-[0.26em] text-nwis-muted">{t.dashboard.historicRiskZone}</div>
-          <div className="mt-3 text-xl text-nwis-text">2,800 — 2,900m</div>
+          <div className="mt-6 text-[10px] uppercase tracking-[0.26em] text-nwis-muted">{t.dashboard.historicRiskZone}</div>
+          <div className="mt-2 text-xl text-nwis-text">2,800 — 2,900 m</div>
         </aside>
       </div>
 
