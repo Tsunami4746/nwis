@@ -1,8 +1,23 @@
 import { X } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { navItems } from '../../data/nwisData'
+import { useLanguage } from '../../data/translations'
 
 function NavigationMenu({ isOpen, onClose }) {
+  const { t } = useLanguage()
+
+  const translatedNavItems = [
+    { label: t.nav.dashboard, route: '/dashboard' },
+    { label: t.nav.wellMap, route: '/well-map' },
+    { label: t.nav.alerts, route: '/alerts' },
+    { label: t.nav.knowledgeRepository, route: '/knowledge' },
+    { label: t.nav.documentIntelligence, route: '/documents' },
+    { label: t.nav.similarWells, route: '/similar-wells' },
+    { label: t.nav.depthCorrelation, route: '/depth-correlation' },
+    { label: t.nav.riskEngine, route: '/risk-engine' },
+    { label: t.nav.aiAssistant, route: '/assistant' },
+    { label: t.nav.dataIngestion, route: '/admin' },
+  ]
+
   return (
     <div
       className={`fixed inset-0 z-50 transition duration-200 ${
@@ -21,7 +36,7 @@ function NavigationMenu({ isOpen, onClose }) {
         }`}
       >
         <div className="mb-10 flex items-center justify-between">
-          <div className="text-[11px] uppercase tracking-[0.26em] text-nwis-muted">Workspace</div>
+          <div className="text-[11px] uppercase tracking-[0.26em] text-nwis-muted">{t.nav.workspace}</div>
           <button
             type="button"
             onClick={onClose}
@@ -33,9 +48,9 @@ function NavigationMenu({ isOpen, onClose }) {
 
         <div className="space-y-8">
           <div>
-            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">Workspace</div>
+            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">{t.nav.workspace}</div>
             <div className="space-y-2">
-              {navItems.slice(0, 3).map((item) => (
+              {translatedNavItems.slice(0, 3).map((item) => (
                 <Link
                   key={item.route}
                   to={item.route}
@@ -49,9 +64,9 @@ function NavigationMenu({ isOpen, onClose }) {
           </div>
 
           <div>
-            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">Intelligence</div>
+            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">{t.labels.intelligence}</div>
             <div className="space-y-2">
-              {navItems.slice(3, 9).map((item) => (
+              {translatedNavItems.slice(3, 9).map((item) => (
                 <Link
                   key={item.route}
                   to={item.route}
@@ -65,14 +80,14 @@ function NavigationMenu({ isOpen, onClose }) {
           </div>
 
           <div>
-            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">Administration</div>
+            <div className="mb-5 text-[10px] uppercase tracking-[0.28em] text-nwis-muted">{t.nav.administration}</div>
             <div className="space-y-2">
               <Link
-                to={navItems[9].route}
+                to={translatedNavItems[9].route}
                 onClick={onClose}
                 className="block rounded-sm border border-transparent px-2 py-2 text-lg text-nwis-text transition hover:border-nwis-border hover:bg-nwis-surface"
               >
-                {navItems[9].label}
+                {translatedNavItems[9].label}
               </Link>
             </div>
           </div>

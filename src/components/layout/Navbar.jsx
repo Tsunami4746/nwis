@@ -1,6 +1,9 @@
 import { Menu, ShieldCheck } from 'lucide-react'
+import { useLanguage } from '../../data/translations'
 
 function Navbar({ _menuOpen, onToggleMenu }) {
+  const { language, setLanguage, t } = useLanguage()
+
   return (
     <header className="sticky top-0 z-40 border-b border-nwis-border bg-nwis-bg/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-[1500px] items-center justify-between px-4 py-4 md:px-8">
@@ -12,8 +15,16 @@ function Navbar({ _menuOpen, onToggleMenu }) {
         </div>
 
         <nav className="hidden items-center gap-8 text-[11px] uppercase tracking-[0.24em] text-nwis-muted md:flex">
-          <a href="#" className="transition hover:text-nwis-text">FAQs</a>
-          <a href="#" className="transition hover:text-nwis-text">Policy</a>
+          <a href="#" className="transition hover:text-nwis-text">{t.nav.faqs}</a>
+          <a href="#" className="transition hover:text-nwis-text">{t.nav.policy}</a>
+          <button
+            type="button"
+            onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+            className="rounded-sm border border-nwis-border bg-nwis-surface px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-nwis-text transition hover:border-nwis-primary/60 hover:text-nwis-primary"
+            aria-label="Toggle language"
+          >
+            {language === 'en' ? t.common.hindi : t.common.english}
+          </button>
           <button
             type="button"
             aria-label="Open navigation"
@@ -26,6 +37,14 @@ function Navbar({ _menuOpen, onToggleMenu }) {
 
         <div className="flex items-center gap-3 md:hidden">
           <ShieldCheck size={16} className="text-nwis-primary" />
+          <button
+            type="button"
+            onClick={() => setLanguage(language === 'en' ? 'hi' : 'en')}
+            className="rounded-sm border border-nwis-border bg-nwis-surface px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-nwis-text"
+            aria-label="Toggle language"
+          >
+            {language === 'en' ? 'हिंदी' : 'EN'}
+          </button>
           <button
             type="button"
             onClick={onToggleMenu}

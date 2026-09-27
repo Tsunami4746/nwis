@@ -2,11 +2,14 @@ import PageHeader from '../components/layout/PageHeader'
 import RiskMetric from '../components/risk/RiskMetric'
 import RiskExplanation from '../components/risk/RiskExplanation'
 import { riskData } from '../data/nwisData'
+import { useLanguage } from '../data/translations'
 
 function RiskEngine() {
+  const { t } = useLanguage()
+
   return (
     <div className="mx-auto max-w-[1500px] px-4 py-8 md:px-8">
-      <PageHeader eyebrow="Risk intelligence" title="Risk Engine" subtitle="Understand the signal. Not just the score." />
+      <PageHeader eyebrow={t.page.riskEngine} title={t.page.riskEngine} subtitle="Understand the signal. Not just the score." />
 
       <div className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
         <section className="space-y-6">
@@ -17,10 +20,10 @@ function RiskEngine() {
                 <div className="text-2xl text-nwis-text">{risk.severity}</div>
               </div>
               <div className="grid gap-4 md:grid-cols-4">
-                <RiskMetric label="Historical events" value={risk.events} />
-                <RiskMetric label="Nearest event" value={risk.nearest} />
-                <RiskMetric label="Similar wells" value={risk.similar} />
-                <RiskMetric label="Depth correlation" value={risk.depth} />
+                <RiskMetric label={t.labels.historicalEvents} value={risk.events} />
+                <RiskMetric label={t.labels.nearestEvent} value={risk.nearest} />
+                <RiskMetric label={t.labels.similarWellsLabel} value={risk.similar} />
+                <RiskMetric label={t.labels.depthCorrelationLabel} value={risk.depth} />
               </div>
             </div>
           ))}

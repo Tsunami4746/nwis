@@ -1,9 +1,12 @@
 import PageHeader from '../components/layout/PageHeader'
+import { useLanguage } from '../data/translations'
 
 function Admin() {
+  const { t } = useLanguage()
+
   return (
     <div className="mx-auto max-w-[1500px] px-4 py-8 md:px-8">
-      <PageHeader eyebrow="Administration" title="Data Ingestion" subtitle="Historical drilling knowledge." />
+      <PageHeader eyebrow={t.page.admin} title={t.page.dataIngestion} subtitle="Historical drilling knowledge." />
 
       <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         <div className="border border-nwis-border bg-nwis-surface p-5">
