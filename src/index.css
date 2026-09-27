@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrumental+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #f2f3f3;
+  background: #090e11;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --nwis-bg: #090e11;
+  --nwis-surface: #0d1418;
+  --nwis-elevated: #111a1f;
+  --nwis-text: #f2f3f3;
+  --nwis-muted: #8b8f91;
+  --nwis-border: #30373a;
+  --nwis-primary: #e5a055;
+}
+
+html {
+  background: #090e11;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #090e11;
+  color: #f2f3f3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button, input {
+  font: inherit;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.instrumental-serif {
+  font-family: 'Instrumental Serif', Georgia, serif;
+}
+
+@layer utilities {
+  .bg-nwis-bg { background-color: #090e11; }
+  .bg-nwis-surface { background-color: #0d1418; }
+  .bg-nwis-elevated { background-color: #111a1f; }
+  .text-nwis-text { color: #f2f3f3; }
+  .text-nwis-muted { color: #8b8f91; }
+  .text-nwis-primary { color: #e5a055; }
+  .border-nwis-border { border-color: #30373a; }
+  .border-nwis-primary { border-color: #e5a055; }
+}

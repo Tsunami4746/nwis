@@ -1,0 +1,64 @@
+<svg width="1600" height="420" viewBox="0 0 1600 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.8" stroke="#D0D5D7" stroke-width="1.5">
+    <g>
+      <path d="M150 320L150 250H170L170 320H150Z"/>
+      <path d="M120 250H200L180 210H140L120 250Z"/>
+      <path d="M130 210H190V150H130V210Z"/>
+      <path d="M145 150H175V120H145V150Z"/>
+      <path d="M160 120V80"/>
+      <path d="M160 80L150 60H170L160 80Z"/>
+      <path d="M160 220V280"/>
+      <path d="M100 290H220"/>
+    </g>
+    <g transform="translate(320,20)">
+      <path d="M80 300L80 200H100L100 300H80Z"/>
+      <path d="M55 200H125L110 160H70L55 200Z"/>
+      <path d="M60 160H120V110H60V160Z"/>
+      <path d="M75 110H105V80H75V110Z"/>
+      <path d="M90 80V40"/>
+      <path d="M90 40L80 20H100L90 40Z"/>
+      <path d="M90 200V270"/>
+      <path d="M40 280H140"/>
+    </g>
+    <g transform="translate(620,0)">
+      <path d="M110 320L110 190H140L140 320H110Z"/>
+      <path d="M80 190H170L155 140H95L80 190Z"/>
+      <path d="M95 140H155V80H95V140Z"/>
+      <path d="M110 80H145V45H110V80Z"/>
+      <path d="M125 45V5"/>
+      <path d="M125 5L115 -15H135L125 5Z"/>
+      <path d="M125 190V260"/>
+      <path d="M60 280H190"/>
+    </g>
+    <g transform="translate(920,30)">
+      <path d="M70 290L70 210H95L95 290H70Z"/>
+      <path d="M45 210H120L108 170H57L45 210Z"/>
+      <path d="M52 170H113V118H52V170Z"/>
+      <path d="M64 118H101V92H64V118Z"/>
+      <path d="M82 92V60"/>
+      <path d="M82 60L72 42H92L82 60Z"/>
+      <path d="M82 210V250"/>
+      <path d="M33 270H130"/>
+    </g>
+    <g transform="translate(1180,10)">
+      <path d="M110 300L110 210H135L135 300H110Z"/>
+      <path d="M80 210H165L152 170H93L80 210Z"/>
+      <path d="M90 170H155V115H90V170Z"/>
+      <path d="M105 115H140V90H105V115Z"/>
+      <path d="M123 90V55"/>
+      <path d="M123 55L112 32H133L123 55Z"/>
+      <path d="M123 210V260"/>
+      <path d="M68 278H178"/>
+    </g>
+    <g transform="translate(1420,45)">
+      <path d="M75 280L75 212H100L100 280H75Z"/>
+      <path d="M52 212H123L110 170H65L52 212Z"/>
+      <path d="M60 170H115V122H60V170Z"/>
+      <path d="M72 122H102V90H72V122Z"/>
+      <path d="M87 90V58"/>
+      <path d="M87 58L78 38H96L87 58Z"/>
+      <path d="M87 212V248"/>
+      <path d="M42 260H130"/>
+    </g>
+  </g>
+</svg>
