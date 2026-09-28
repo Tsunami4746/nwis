@@ -1,67 +1,21 @@
+import { useRef, useState } from 'react'
+import { FileText, Pencil, Plus, Search, Upload, X } from 'lucide-react'
 import PageHeader from '../components/layout/PageHeader'
 import { useLanguage } from '../data/translations'
 
+const seed = [
+  { id: 'NW-187', location: 'Dibrugarh North', formation: 'Tipam', documents: 14, quality: 'Complete' },
+  { id: 'NW-164', location: 'Moran East', formation: 'Barail', documents: 9, quality: 'Complete' },
+  { id: 'NW-221', location: 'Naharkatiya South', formation: 'Tipam', documents: 6, quality: 'Partial' },
+  { id: 'NW-156', location: 'Duliajan West', formation: 'Girujan', documents: 3, quality: 'Missing' },
+]
+
 function Admin() {
-  const { t } = useLanguage()
-
-  return (
-    <div className="mx-auto max-w-[1500px] px-4 py-8 md:px-8">
-      <PageHeader eyebrow={t.page.admin} title={t.page.dataIngestion} subtitle="Historical drilling knowledge." />
-
-      <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-        <div className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-nwis-muted">Documents</div>
-          <div className="mt-3 text-4xl text-nwis-text">1,248</div>
-        </div>
-        <div className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-nwis-muted">Processed</div>
-          <div className="mt-3 text-4xl text-nwis-text">1,103</div>
-        </div>
-        <div className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-nwis-muted">Pending validation</div>
-          <div className="mt-3 text-4xl text-nwis-text">98</div>
-        </div>
-        <div className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-nwis-muted">Failed</div>
-          <div className="mt-3 text-4xl text-nwis-text">47</div>
-        </div>
-      </div>
-
-      <div className="mt-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-        <section className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="mb-5 text-[10px] uppercase tracking-[0.26em] text-nwis-muted">Data quality</div>
-          <div className="space-y-5">
-            {[
-              ['Well information', '98%'],
-              ['Depth extraction', '96%'],
-              ['Event extraction', '91%'],
-              ['Formation mapping', '94%'],
-            ].map(([label, value]) => (
-              <div key={label}>
-                <div className="mb-2 flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-nwis-muted">
-                  <span>{label}</span>
-                  <span>{value}</span>
-                </div>
-                <div className="h-px w-full bg-nwis-border">
-                  <div className="h-full bg-nwis-primary" style={{ width: value.replace('%', '') + '%' }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="border border-nwis-border bg-nwis-surface p-5">
-          <div className="mb-5 text-[10px] uppercase tracking-[0.26em] text-nwis-muted">Processing queue</div>
-          <div className="space-y-4 text-sm text-nwis-text">
-            <div className="flex items-center justify-between border-b border-nwis-border pb-3"><span>WCR-NW187-03.pdf</span><span className="text-nwis-primary">Validated</span></div>
-            <div className="flex items-center justify-between border-b border-nwis-border pb-3"><span>DDR-NW164-02.pdf</span><span className="text-nwis-primary">Processing</span></div>
-            <div className="flex items-center justify-between border-b border-nwis-border pb-3"><span>WCR-NW221-11.pdf</span><span className="text-nwis-primary">Awaiting review</span></div>
-            <div className="flex items-center justify-between pb-1"><span>MUD-NW156-02.pdf</span><span className="text-nwis-primary">Pending</span></div>
-          </div>
-        </section>
-      </div>
-    </div>
-  )
+  const { t } = useLanguage(); const upload = useRef(); const [wells,setWells]=useState(seed); const [docs,setDocs]=useState(['WCR-NW187-03.pdf','DDR-NW164-02.pdf']); const [query,setQuery]=useState(''); const [draft,setDraft]=useState(null); const [notice,setNotice]=useState('')
+  const shown=wells.filter(w=>`${w.id} ${w.location} ${w.formation}`.toLowerCase().includes(query.toLowerCase()))
+  const save=e=>{e.preventDefault(); const item={...draft,id:draft.id.toUpperCase(),documents:Number(draft.documents||0)}; setWells(v=>v.some(w=>w.id===item.id)?v.map(w=>w.id===item.id?item:w):[item,...v]);setDraft(null);setNotice(`${item.id} saved to the well register`)}
+  const addFiles=e=>{const names=Array.from(e.target.files||[]).map(f=>f.name);setDocs(v=>[...names,...v]);setNotice(`${names.length} document${names.length===1?'':'s'} added to processing`);e.target.value=''}
+  return <div className="mx-auto max-w-[1500px] px-4 py-8 md:px-8"><PageHeader eyebrow={t.page.admin} title="Data control room" subtitle="Manage well records, source documents, and data readiness for drilling intelligence." action={<div className="flex gap-2"><button onClick={()=>setDraft({id:'',location:'',formation:'Tipam',documents:0,quality:'Partial'})} className="inline-flex items-center gap-2 border border-nwis-primary bg-nwis-primary px-4 py-2 text-[10px] uppercase tracking-[.18em] text-nwis-bg"><Plus size={15}/>Add well</button><button onClick={()=>upload.current.click()} className="inline-flex items-center gap-2 border border-nwis-border px-4 py-2 text-[10px] uppercase tracking-[.18em]"><Upload size={15}/>Bulk upload</button><input ref={upload} onChange={addFiles} multiple type="file" className="hidden"/></div>}/>{notice&&<div className="mb-6 flex justify-between border border-nwis-green/40 bg-nwis-green/10 p-3 text-sm"><span>{notice}</span><button onClick={()=>setNotice('')}><X size={16}/></button></div>}<div className="grid border border-nwis-border sm:grid-cols-4"><Metric label="Registered wells" value={wells.length}/><Metric label="Source documents" value={docs.length}/><Metric label="Complete records" value={wells.filter(w=>w.quality==='Complete').length}/><Metric label="Needs review" value={wells.filter(w=>w.quality!=='Complete').length}/></div><section className="mt-8 border border-nwis-border bg-nwis-surface"><div className="flex justify-between gap-4 border-b border-nwis-border p-5"><div className="text-[10px] uppercase tracking-[.22em] text-nwis-muted">Well register</div><label className="flex items-center gap-2 border border-nwis-border px-3 py-2"><Search size={14}/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search wells" className="bg-transparent text-sm outline-none"/></label></div><div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-sm"><thead className="bg-nwis-elevated text-[10px] uppercase tracking-[.18em] text-nwis-muted"><tr><th className="p-4">Well ID</th><th>Location</th><th>Formation</th><th>Documents</th><th>Quality</th><th></th></tr></thead><tbody>{shown.map(w=><tr key={w.id} className="border-t border-nwis-border"><td className="p-4 font-medium">{w.id}</td><td>{w.location}</td><td>{w.formation}</td><td>{w.documents}</td><td><select value={w.quality} onChange={e=>setWells(v=>v.map(x=>x.id===w.id?{...x,quality:e.target.value}:x))} className="border border-nwis-border bg-nwis-bg p-1 text-xs"><option>Complete</option><option>Partial</option><option>Missing</option></select></td><td><button title="Edit well" onClick={()=>setDraft(w)} className="p-2 text-nwis-primary"><Pencil size={15}/></button></td></tr>)}</tbody></table></div></section><section className="mt-8 border border-nwis-border bg-nwis-surface p-5"><div className="text-[10px] uppercase tracking-[.22em] text-nwis-muted">Document processing queue</div><div className="mt-4 divide-y divide-nwis-border">{docs.map((d,i)=><div key={`${d}-${i}`} className="flex items-center justify-between py-3 text-sm"><span className="flex items-center gap-2"><FileText size={15} className="text-nwis-primary"/>{d}</span><span className="text-nwis-primary">Processing</span></div>)}</div></section>{draft&&<div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4"><form onSubmit={save} className="w-full max-w-lg border border-nwis-border bg-nwis-elevated"><div className="flex justify-between border-b border-nwis-border p-5"><h2>{wells.some(w=>w.id===draft.id)?'Edit well':'Add well'}</h2><button type="button" onClick={()=>setDraft(null)}><X size={18}/></button></div><div className="grid gap-4 p-5 sm:grid-cols-2">{['id','location','formation','documents'].map(k=><label key={k} className="text-[10px] uppercase tracking-[.18em] text-nwis-muted">{k}<input required value={draft[k]} onChange={e=>setDraft({...draft,[k]:e.target.value})} className="mt-2 w-full border border-nwis-border bg-nwis-bg p-2 text-sm normal-case tracking-normal"/></label>)}</div><div className="flex justify-end gap-2 border-t border-nwis-border p-5"><button type="button" onClick={()=>setDraft(null)} className="border border-nwis-border px-4 py-2 text-xs">Cancel</button><button className="bg-nwis-primary px-4 py-2 text-xs text-nwis-bg">Save well</button></div></form></div>}</div>
 }
-
+function Metric({label,value}){return <div className="border-b border-nwis-border bg-nwis-surface p-5 sm:border-b-0 sm:border-r last:border-r-0"><div className="text-[10px] uppercase tracking-[.18em] text-nwis-muted">{label}</div><div className="mt-3 text-3xl">{value}</div></div>}
 export default Admin

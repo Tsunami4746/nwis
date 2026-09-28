@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../data/translations'
@@ -6,6 +7,12 @@ import Button from '../components/ui/Button'
 function Login() {
   const navigate = useNavigate()
   const { t } = useLanguage()
+  const [role, setRole] = useState('engineer')
+
+  function signIn(event) {
+    event.preventDefault()
+    navigate(role === 'admin' ? '/admin' : '/dashboard')
+  }
 
   return (
     <div className="min-h-screen bg-nwis-bg text-nwis-text">
@@ -27,19 +34,19 @@ function Login() {
         </section>
 
         <section className="relative border border-nwis-border bg-[#0d1418]/90 p-6 md:p-8">
-          <div className="mb-8 flex gap-3 rounded-full border border-nwis-border bg-[#161f24] p-1">
-            <button type="button" className="flex-1 rounded-full border border-[#8db7c5] bg-[#1a2c34] px-4 py-3 text-[10px] uppercase tracking-[0.24em] text-[#dfeef2]">
+          <div className="mb-8 flex gap-3 border border-nwis-border bg-[#161f24] p-1" role="tablist" aria-label="Select workspace role">
+            <button type="button" role="tab" aria-selected={role === 'engineer'} onClick={() => setRole('engineer')} className={`flex-1 border px-4 py-3 text-[10px] uppercase tracking-[0.24em] transition ${role === 'engineer' ? 'border-[#8db7c5] bg-[#1a2c34] text-[#dfeef2]' : 'border-transparent text-nwis-muted hover:text-nwis-text'}`}>
               {t.login.fieldEngineer}
             </button>
-            <button type="button" className="flex-1 rounded-full border border-transparent px-4 py-3 text-[10px] uppercase tracking-[0.24em] text-nwis-muted">
+            <button type="button" role="tab" aria-selected={role === 'admin'} onClick={() => setRole('admin')} className={`flex-1 border px-4 py-3 text-[10px] uppercase tracking-[0.24em] transition ${role === 'admin' ? 'border-nwis-primary/70 bg-nwis-primary/10 text-nwis-primary' : 'border-transparent text-nwis-muted hover:text-nwis-text'}`}>
               {t.login.officeAdmin}
             </button>
           </div>
 
-          <div className="space-y-6">
+          <form className="space-y-6" onSubmit={signIn}>
             <div>
               <label className="mb-2 block text-[10px] uppercase tracking-[0.26em] text-nwis-muted">{t.login.email}</label>
-              <input type="email" defaultValue="engineer@nwis.io" className="w-full border border-nwis-border bg-[#0b1114] px-4 py-3 text-nwis-text outline-none placeholder:text-nwis-muted" />
+              <input type="email" defaultValue={role === 'admin' ? 'admin@nwis.io' : 'engineer@nwis.io'} key={role} className="w-full border border-nwis-border bg-[#0b1114] px-4 py-3 text-nwis-text outline-none placeholder:text-nwis-muted focus:border-nwis-primary" />
             </div>
 
             <div>
@@ -47,11 +54,11 @@ function Login() {
               <input type="password" defaultValue="password" className="w-full border border-nwis-border bg-[#0b1114] px-4 py-3 text-nwis-text outline-none placeholder:text-nwis-muted" />
             </div>
 
-            <Button className="w-full rounded-[10px] text-[11px] font-medium tracking-[0.18em]" onClick={() => navigate('/dashboard')}>
+            <Button type="submit" className="w-full rounded-[10px] text-[11px] font-medium tracking-[0.18em]">
               {t.login.signIn}
               <ArrowRight size={14} className="ml-2" />
             </Button>
-          </div>
+          </form>
         </section>
 
         <div className="pointer-events-none absolute -bottom-40 left-1/2 h-[260px] w-[85%] -translate-x-1/2 bg-[url('/drilling-rig-silhouette.svg')] bg-contain bg-bottom bg-no-repeat opacity-25" />
